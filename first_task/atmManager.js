@@ -8,7 +8,7 @@ const atmManager = function () {
     this.i = 0;
     this.startWork = () => {
          if (cashMashine.atms[this.i].atmStatus === 'free') {
-             console.log(cashMashine.atms[this.i].atmName + ' is besy');
+             console.log(cashMashine.atms[this.i].atmName + ' is busy');
             cashMashine.atms[this.i].atmStatus = 'busy';
             queue.peopleQuantity--;
             emitter.emit('humanComeToAtm', this.i);
