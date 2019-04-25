@@ -5,14 +5,22 @@ const queue = require('./queue');
 const emitter = require('./event_emitter');
 
 const atmManager = function () {
-    this.state = () => {
-        if (queue.peopleQuantity > 0) {
-            console.log(cashMashine.stateStatus + ' status');
-            cashMashine.stateStatus = 'busy';
-            emitter.emit('humanComeToAtm');
-            console.log(queue.peopleQuantity + ' ----------------------------');
-        }
+    this.i = 0;
+    this.startWork = () => {
+         if (cashMashine.atms[this.i].atmStatus === 'free') {
+             console.log(cashMashine.atms[this.i].atmName + ' is besy');
+            cashMashine.atms[this.i].atmStatus = 'busy';
+            queue.peopleQuantity--;
+            emitter.emit('humanComeToAtm', this.i);
+            if (this.i < cashMashine.atms.length - 1){
+                this.i++;
+            }else{
+                this.i = 0;
+            };
+        };
     };
+
+
 };
 
 module.exports = new atmManager;

@@ -1,10 +1,10 @@
 'use strict'
 
-const emitter = require('./event_emitter');
-
 const Queue = function () {
-    this.peopleQuantity = 0;
+    this.peopleQuantity = 2;
+
 }
+
 module.exports = new Queue;
 
 

@@ -6,39 +6,42 @@ const queue = require('./queue');
 const rundomNum = require('./randomNum');
 const atmManager = require('./atmManager');
 
-(function () {
-    function queueGenerator(m, n) {
-        setTimeout(function () {          
-            queue.peopleQuantity++;
-            console.log('addHuman' + queue.peopleQuantity);
-
-            atmManager.state();
-            queueGenerator(m, n);
-        }, rundomNum(m, n));
+const App = function () {
+    this.addAtm = function (min, max, atmName) {
+        const countPeople = cashMashine.countPeople;
+        const atmStatus = cashMashine.atmStatus;
+        cashMashine.atms.push({ atmName, min, max, countPeople, atmStatus });
     };
-    queueGenerator(2000, 3000);
-})();
 
-emitter.on('humanComeToAtm', () => {
-    console.log(queue.peopleQuantity + ' humanComeToAtm');
-    queue.peopleQuantity--;
-    setTimeout(function () {
-        console.log('humanGone');
-        emitter.emit('atmFree');
-    }, rundomNum(1000, 2000));
-    
-});
+    this.addQueue = function recursion(min, max) {
+        setTimeout(function () {
+            queue.peopleQuantity++;
+            console.log('human in queue ' + queue.peopleQuantity);
+            recursion(min, max);
+        }, rundomNum(min, max));
+    };
 
-emitter.on('atmFree', () => {
-    setTimeout(() => {
-        atmManager.state();
-    }, 1000);
-});
+    this.start = function () {
+        if(queue.peopleQuantity > 1){
+            atmManager.startWork();
+        };
+    };
 
+    emitter.on('humanComeToAtm', () => {
+        let i = emitter.atmIndex;
+        setTimeout(() => {
+            cashMashine.atms[i].countPeople++;
+            console.log(cashMashine.atms[i].atmName + ' is free. People done: ' + cashMashine.atms[i].countPeople)
+            cashMashine.atms[i].atmStatus = 'free';
+            emitter.emit('atmFree');
+        }, rundomNum(cashMashine.atms[i].min, cashMashine.atms[i].max));
+    });
 
-const atmOne = cashMashine;
-const atmTwo = cashMashine;
+    emitter.on('atmFree', () => {
+        setTimeout(() => {
+            atmManager.startWork();
+        }, 1000);
+    });
+};
+module.exports = new App;
 
-
-// setInterval(atmTwo.state, 1100);
-// atmTwo.state('secondAtm');
