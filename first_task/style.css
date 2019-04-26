@@ -1,0 +1,18 @@
+.atm-container {
+    height: 40vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+.turn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.busy-atm {
+    background-color: #f00;
+}
+
+.free-atm {
+    background-color: #06b900;
+}

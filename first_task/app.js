@@ -1,47 +1,81 @@
 'use strict'
 
-const emitter = require('./event_emitter');
-const cashMashine = require('./atm');
-const queue = require('./queue');
-const rundomNum = require('./randomNum');
-const atmManager = require('./atmManager');
+const emitter = require('./eventEmitter');
+const CashMashine = require('./atm');
+const Queue = require('./queue');
 
-const App = function () {
-    this.addAtm = function (min, max, atmName) {
-        const countPeople = cashMashine.countPeople;
-        const atmStatus = cashMashine.atmStatus;
-        cashMashine.atms.push({ atmName, min, max, countPeople, atmStatus });
+
+class App {
+    constructor() {
+        this.atms = [];
+        this.queue;
+    }
+
+    addQueue(min, max) {
+        const newQueue = new Queue;
+
+        const { peopleQuantity, addHuman, removeHuman } = newQueue;
+        this.queue = { peopleQuantity, min, max, addHuman, removeHuman };
     };
 
-    this.addQueue = function recursion(min, max) {
-        setTimeout(function () {
-            queue.peopleQuantity++;
-            console.log('human in queue ' + queue.peopleQuantity);
-            recursion(min, max);
-        }, rundomNum(min, max));
+    addAtm(min, max, atmName) {
+        const atm = new CashMashine;
+        const { countPeople, atmStatus, atmWorks } = atm;
+        this.atms.push({ atmName, min, max, countPeople, atmStatus, atmWorks });
+        // console.log(this.atms);
     };
 
-    this.start = function () {
-        if(queue.peopleQuantity > 1){
-            atmManager.startWork();
-        };
+    startApp() {
+        this.queue.addHuman(this.queue.min, this.queue.max);
+
+        emitter.on('removeHuman', () => {
+            this.queue.removeHuman();
+        });
+        console.log()
+
+        emitter.on('changeHumahsInQueue', () => {
+            let i = 0;
+            if (this.atms[i].atmStatus === 'free') {
+                this.atms[i].atmWorks(i);
+                if (i < this.atms.length - 1) {
+                    i++;
+                } else {
+                    i = 0;
+                };
+            };
+        })
+
+
     };
 
-    emitter.on('humanComeToAtm', () => {
-        let i = emitter.atmIndex;
-        setTimeout(() => {
-            cashMashine.atms[i].countPeople++;
-            console.log(cashMashine.atms[i].atmName + ' is free. People done: ' + cashMashine.atms[i].countPeople)
-            cashMashine.atms[i].atmStatus = 'free';
-            emitter.emit('atmFree');
-        }, rundomNum(cashMashine.atms[i].min, cashMashine.atms[i].max));
-    });
 
-    emitter.on('atmFree', () => {
-        setTimeout(() => {
-            atmManager.startWork();
-        }, 1000);
-    });
 };
+
+App.prototype.__proto__ = Queue;
+
+const app = new App;
+app.addAtm(1000, 2000, 'first-ATM');
+app.addAtm(1500, 2000, 'second-ATM');
+// app.addAtm(3000, 5000, 'third-ATM');
+app.addQueue(1000, 2000);
+app.startApp()
+
 module.exports = new App;
 
+
+// this.queue[0].addHuman(this.queue[0].min, this.queue[0].max);
+
+//         this.atms.forEach((item, i) => {
+//             console.log(this.queue[0].peopleQuantity);
+//             if (this.queue[0].peopleQuantity > 0 && item.atmStatus === 'free') {
+//                 item.atmWorks(i);
+//             }
+//         });        
+
+//         emitter.on('atmFree', () => {
+//             let i = emitter.emitParams[0];
+//             this.atms[i].atmWorks(i);
+//         });
+//         emitter.on('removeHuman', () => {
+//             this.queue[0].removeHuman();
+//         })

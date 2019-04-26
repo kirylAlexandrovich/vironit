@@ -2,7 +2,7 @@
 
 const EventEmitter = function () {
     this.eventTable = {};
-    this.atmIndex;
+    this.emitParams;
 };
 
 EventEmitter.prototype.on = function (event, handler) {
@@ -19,11 +19,12 @@ EventEmitter.prototype.on = function (event, handler) {
 }
 
 EventEmitter.prototype.emit = function (event, ...params) {
-    this.atmIndex = params[0];
+    this.emitParams = params;
     if (this.eventTable[event]) {
         this.eventTable[event].forEach((item) => {
-            item.apply(this, params);
+            item.apply(this);
         });
+
     };
 };
 
@@ -35,4 +36,4 @@ module.exports = new EventEmitter;
 // test.on('two', () => { console.log('hay') });
 // f();
 // test.emit('two');
-// test.emit('one');
+// test.emit('one', '+++++');
