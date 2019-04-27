@@ -31,51 +31,25 @@ class App {
         emitter.on('removeHuman', () => {
             this.queue.removeHuman();
         });
-        console.log()
 
         emitter.on('changeHumahsInQueue', () => {
-            let i = 0;
-            if (this.atms[i].atmStatus === 'free') {
-                this.atms[i].atmWorks(i);
-                if (i < this.atms.length - 1) {
-                    i++;
-                } else {
-                    i = 0;
+            this.atms.find((el, index) => {
+                if (this.atms[index].atmStatus === 'free') {
+                    if(this.queue.peopleQuantity > 0) {
+                        console.log(55555555555555555)
+                        this.atms[index].atmWorks(index);
+                    };
                 };
-            };
-        })
+            });
+        });
 
-
+        emitter.on('atmIsFree', (i) => {
+            if(this.queue.peopleQuantity > 0 ) {
+                console.log(i);
+                this.atms[i].atmWorks(i);
+            }
+        });
     };
-
-
 };
 
-App.prototype.__proto__ = Queue;
-
-const app = new App;
-app.addAtm(1000, 2000, 'first-ATM');
-app.addAtm(1500, 2000, 'second-ATM');
-// app.addAtm(3000, 5000, 'third-ATM');
-app.addQueue(1000, 2000);
-app.startApp()
-
 module.exports = new App;
-
-
-// this.queue[0].addHuman(this.queue[0].min, this.queue[0].max);
-
-//         this.atms.forEach((item, i) => {
-//             console.log(this.queue[0].peopleQuantity);
-//             if (this.queue[0].peopleQuantity > 0 && item.atmStatus === 'free') {
-//                 item.atmWorks(i);
-//             }
-//         });        
-
-//         emitter.on('atmFree', () => {
-//             let i = emitter.emitParams[0];
-//             this.atms[i].atmWorks(i);
-//         });
-//         emitter.on('removeHuman', () => {
-//             this.queue[0].removeHuman();
-//         })

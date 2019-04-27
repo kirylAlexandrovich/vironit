@@ -11,9 +11,8 @@ class Queue {
     addHuman(min, max) {
         let self = this;
         this.peopleQuantity++;
-
         console.log('human in queue ' + this.peopleQuantity);
-        emitter.emit('changeHumahsInQueue');
+        emitter.emit('changeHumahsInQueue', {a: 1});
         setTimeout(function () {
             self.addHuman(min, max);
         }, rundomNum(min, max));
@@ -21,13 +20,9 @@ class Queue {
 
     removeHuman() {
         this.peopleQuantity--;
+        this.removedPeople++;
         console.log('remove human', this.peopleQuantity);
     };
-}
-Queue.prototype.__proto__ = emitter;
+};
 
 module.exports = Queue;
-
-// const queue = new Queue;
-// queue.addHuman(1000, 2000);
-

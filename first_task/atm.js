@@ -10,15 +10,15 @@ class Atm {
     };
 
     atmWorks(i) {
-        console.log(this.atmName + ' is busy')
+        console.log(this.atmName + ' is busy ' + this.atmStatus + '---------------------');
         this.atmStatus = 'busy';
         emitter.emit('removeHuman');
         setTimeout(() => {
             setTimeout(() => {
                 this.atmStatus = 'free';
                 this.countPeople++;
-                console.log(this.atmName + ' ' + this.countPeople);
-                emitter.emit('atmFree', i);
+                console.log(this.atmName + ' is free ' + this.countPeople);
+                emitter.emit('atmIsFree', i);
             }, randomNum(this.min, this.max));
         },1000);
     };
@@ -30,11 +30,3 @@ class Atm {
 Atm.prototype.__proto__ = emitter;
 
 module.exports = Atm;
-
-// const atm = new Atm;
-
-// atm.statusChange();
-// atm.on('aaa', () => {
-//     console.log('asdfgh');
-// })
-// atm.emit('aaa');
