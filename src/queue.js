@@ -1,34 +1,37 @@
 'use strict'
 
 const rundomNum = require('./randomNum');
-const CashMashine = require('./atm');
-const app = require('./app');
-const emitter = require('./eventEmitter');
-const atmUi = require('./atmUI');
+const Emitter = require('./eventEmitter');
 
-class Queue {
-    constructor() {
-        // super();
+const queueUi = require('./ququeUi');
+
+class Queue extends Emitter {
+
+    constructor(eventTable, on, emit) {
+        super(eventTable, on, emit);
         this.peopleQuantity = 0;
     };
 
+
     addHuman(min, max) {
+        this.emit('changeHumahsInQueue');
         let self = this;
+       
         this.peopleQuantity++;
-        atmUi.changeHumahsInQueue(this.peopleQuantity);
+
+        queueUi.changeHumahsInQueue(this.peopleQuantity);
         console.log('human in queue ' + this.peopleQuantity);
-        emitter.emit('changeHumahsInQueue', this.peopleQuantity);
-        
+
         setTimeout(function () {
             self.addHuman(min, max);
         }, rundomNum(min, max));
     };
 
     removeHuman() {
+        
         this.peopleQuantity--;
-        // emitter.emit('changeHumahsInQueue', this.peopleQuantity);
-        atmUi.changeHumahsInQueue(this.peopleQuantity);
-        // console.log('remove human', this.peopleQuantity);
+
+        queueUi.changeHumahsInQueue(this.peopleQuantity);
     };
 };
 

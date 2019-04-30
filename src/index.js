@@ -1,35 +1,31 @@
 import _ from 'lodash';
-// import './style.css';
+import './style.css';
 
 const app = require('./app');
 const atmUi = require('./atmUI');
 const Emitter = require('./eventEmitter');
 
+function addAtm() {
+    const minTime = document.getElementById('minTimeForAtm').value;
+    const maxTime = document.getElementById('maxTimeForAtm').value;
+    if(minTime === '' || maxTime === ''){
+        alert('ENTER MIN AND MAX TIME IN SECONDS');
+        return;
+    };
+    console.log(minTime, maxTime);
+    app.addAtm(minTime * 1000, maxTime * 1000);
+};
 
+function deleteAtm() {
+    app.deleteAtm();
+};
 
-Emitter.on('addATM', (i) => {
-    atmUi.addAtm(i);
-});
+const addAtmButton = document.getElementById('addAtm');
+addAtmButton.addEventListener('click', addAtm);
 
-Emitter.on('changeCountPeople', (i, countPeople) => {
-    atmUi.addHumanToAtm(i, countPeople);
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa ' + i + ' ' +countPeople);
-});
-
-Emitter.on('atmBusy', (i) => {
-    atmUi.changeAtmStatus(i);
-});
-
-Emitter.on('addQueue', () => {
-    atmUi.addQueue();
-})
-
-// Emitter.on('changeHumahsInQueue', (peopleQuantity) => {
-//     atmUi.changeHumahsInQueue(peopleQuantity);
-// });
+const deleteAtmButton = document.getElementById('deleteAtm');
+deleteAtmButton.addEventListener('click', deleteAtm);
 
 app.addAtm(3000, 4000, 'firstAtm');
-app.addAtm(3000, 3500, 'secondAtm');
-app.addAtm(2000, 3000, 'thirdAtm')
 app.addQueue(1000, 2000);
 app.startApp();

@@ -3,10 +3,10 @@
 class EventEmitter {
     constructor() {
         this.eventTable = {};
-        this.emitParams;
-    }
+    };
 
     on(event, handler) {
+
         if (!this.eventTable[event]) {
             this.eventTable[event] = [];
         };
@@ -17,16 +17,16 @@ class EventEmitter {
         };
         return unsubscribe.bind(this);
     }
+
     emit(event, ...params) {
         if (this.eventTable[event]) {
             this.eventTable[event].forEach((item) => {
                 item.apply(this, params);
             });
-        }
-        ;
-    }
-}
+        };
+    };
+};
 
 
 
-module.exports = new EventEmitter;
+module.exports = EventEmitter;

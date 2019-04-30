@@ -1,57 +1,72 @@
 'use strict'
 
-const Emitter = require('./eventEmitter');
 const CashMashine = require('./atm');
 const Queue = require('./queue');
 const atmUi = require('./atmUI');
+const queueUi = require('./ququeUi');
 
 class App {
     constructor() {
-        // super();
         this.atms = [];
-        this.queue;
+        this.queue = [];
     }
 
     addQueue(min, max) {
-        const newQueue = new Queue;
-        const { peopleQuantity, addHuman, removeHuman } = newQueue;
-        this.queue = { peopleQuantity, min, max, addHuman, removeHuman };
-        Emitter.emit('addQueue');
-    };
+        const queue = new Queue;
+        queue.min = min;
+        queue.max = max;
 
-    addAtm(min, max, atmName) {
-        const atm = new CashMashine;
-        const { countPeople, atmStatus, atmWorks } = atm;
-        this.atms.push({ atmName, min, max, countPeople, atmStatus, atmWorks });
-        atmUi.addAtm(this.atms.length - 1);
-        // Emitter.emit('addATM', this.atms.length - 1);
-    };
-
-    
-
-    startApp() {
-        this.queue.addHuman(this.queue.min, this.queue.max);
-
-        Emitter.on('removeHuman', () => {
-            this.queue.removeHuman();
-        });
-
-        Emitter.on('changeHumahsInQueue', () => {
+        queue.on('changeHumahsInQueue', () => {
             this.atms.find((el, index) => {
                 if (this.atms[index].atmStatus === 'free') {
-                    if(this.queue.peopleQuantity > 0) {
+
+                    if (this.queue[0].peopleQuantity > 0) {
                         this.atms[index].atmWorks(index);
                     };
                 };
             });
         });
 
-        Emitter.on('atmIsFree', (i) => {
-            if(this.queue.peopleQuantity > 0 ) {
-                // Emitter.emit('atmBusy', i);
-                this.atms[i].atmWorks(i);
-            }
+        this.queue.push(queue);
+
+        queueUi.addQueue();
+    };
+
+    addAtm(min, max) {
+        const atm = new CashMashine();
+        atm.min = min;
+        atm.max = max;
+        atm.on('atmIsFree', (i) => {
+            if (this.queue[0].peopleQuantity > 0) {
+                console.log('atm is free check people quantity ' + i)
+                atm.atmWorks(i);
+            };
         });
+
+        atm.on('changeHumanInQueue', () => {
+            if (atm.atmStatus === 'free') {
+                atm.atmWorks();
+            };
+        });
+
+        atm.on('removeHuman', () => {
+            this.queue[0].removeHuman();
+        });
+
+        this.atms.push(atm);
+        atmUi.addAtm(this.atms.length - 1);
+
+    };
+
+    deleteAtm() {
+        this.atms.pop();
+        atmUi.deleteAtm(this.atms.length);
+    };
+
+    startApp() {
+        this.queue[0].addHuman(this.queue[0].min, this.queue[0].max);
+
+        
     };
 };
 
