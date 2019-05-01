@@ -3,14 +3,13 @@
 class AtmUi {
     constructor() {
         this.atmContainer = document.getElementById('atmContainer');
-    };
+        this.atm;
+    }
 
-    addAtm(i) {
-
-        const atm = document.createElement('div');
-        atm.id = 'atm-' + i;
-        atm.className = 'atm';
-        atm.innerText = '0';
+    addAtm() {
+        this.atm = document.createElement('div');
+        this.atm.className = 'atm free-atm';
+        this.atm.innerText = '0';
 
         // const closeButton = document.createElement('div');
         // closeButton.id = 'closeButton-' + i;
@@ -18,25 +17,23 @@ class AtmUi {
         // closeButton.innerHTML = '&#10006;';
         // this.atmContainer.appendChild(closeButton);
 
-        this.atmContainer.appendChild(atm);
-    };
-
-    deleteAtm(i) {
-        const atm = document.getElementById('atm-' + i);
-        atm.remove();
+        this.atmContainer.appendChild(this.atm);
     }
 
-    addHumanToAtm(i, countPeople) {
-        const atm = document.getElementById('atm-' + i);
-        atm.innerText = countPeople;
-        atm.className = 'atm free-atm';
-    };
+    deleteAtm() {
+        this.atm.remove();
+    }
 
-    changeAtmStatus(i) {
-        const atm = document.getElementById('atm-' + i);
-        atm.className = 'atm busy-atm';
-    };
+    addHumanToAtm(countPeople) {
+        
+        this.atm.innerText = countPeople;
+        this.atm.className = 'atm free-atm';
+    }
 
-};
+    setAtmClassBusy() { 
+        this.atm.className = 'atm busy-atm';
+    }
 
-module.exports = new AtmUi;
+}
+
+module.exports = AtmUi;

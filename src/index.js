@@ -12,7 +12,6 @@ function addAtm() {
         alert('ENTER MIN AND MAX TIME IN SECONDS');
         return;
     };
-    console.log(minTime, maxTime);
     app.addAtm(minTime * 1000, maxTime * 1000);
 };
 
@@ -26,6 +25,6 @@ addAtmButton.addEventListener('click', addAtm);
 const deleteAtmButton = document.getElementById('deleteAtm');
 deleteAtmButton.addEventListener('click', deleteAtm);
 
-app.addAtm(3000, 4000, 'firstAtm');
+app.addAtm(3000, 4000);
 app.addQueue(1000, 2000);
-app.startApp();
+
