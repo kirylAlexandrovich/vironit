@@ -1,5 +1,3 @@
-'use strict'
-
 const Emitter = require('./eventEmitter');
 
 class Atm extends Emitter {
@@ -10,18 +8,16 @@ class Atm extends Emitter {
     }
 
     addHuman() {
-        this.countPeople++;
+        this.countPeople += 1;
     }
 
     setAtmStatusFree() {
         this.atmStatus = 'free';
+        this.emit('atmIsFree');
     }
 
     setAtmStatusBusy() {
         this.atmStatus = 'busy';
     }
-
 }
-
 module.exports = Atm;
-

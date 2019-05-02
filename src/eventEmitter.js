@@ -1,4 +1,4 @@
-'use strict'
+
 
 class EventEmitter {
     constructor() {
@@ -6,14 +6,13 @@ class EventEmitter {
     }
 
     on(event, handler) {
-
         if (!this.eventTable[event]) {
             this.eventTable[event] = [];
         }
         this.eventTable[event].push(handler);
 
         function unsubscribe() {
-            this.eventTable[event] = this.eventTable[event].filter((item) => item != handler);
+            this.eventTable[event] = this.eventTable[event].filter(item => item !== handler);
         }
         return unsubscribe.bind(this);
     }
@@ -26,7 +25,5 @@ class EventEmitter {
         }
     }
 }
-
-
 
 module.exports = EventEmitter;

@@ -73,8 +73,25 @@ body {
 }
 
 .label-for-min-max-input {
+    font-size: 25px;
+}
+.atm-cont {
+    width: 108px;
+    height: 108px;
+    position: relative;
+}
+.atm-close-button {
+    width: 22px;
+    height: 22px;
+    background-color: #64b5f6;
+    border: 1px solid #2286c3;
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
     position: absolute;
-    top: 4px;
-    left: 100px;
+    right: 0;
 }
 
+.atm-close-button:hover {
+    background-color: #2286c3;
+}

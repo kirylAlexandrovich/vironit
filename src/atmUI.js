@@ -1,39 +1,42 @@
-'use strict'
+const Emitter = require('./eventEmitter');
+// const index = require('./index');
 
-class AtmUi {
+class AtmUi extends Emitter {
     constructor() {
-        this.atmContainer = document.getElementById('atmContainer');
-        this.atm;
+        super();
+        this.atmsContainer = document.getElementById('atmContainer');
     }
 
     addAtm() {
+        this.atmCont = document.createElement('div');
+        this.atmCont.className = 'atm-cont';
+
         this.atm = document.createElement('div');
         this.atm.className = 'atm free-atm';
         this.atm.innerText = '0';
 
-        // const closeButton = document.createElement('div');
-        // closeButton.id = 'closeButton-' + i;
-        // closeButton.className = 'atm-close-button';
-        // closeButton.innerHTML = '&#10006;';
-        // this.atmContainer.appendChild(closeButton);
+        const closeButton = document.createElement('div');
+        closeButton.className = 'atm-close-button';
+        closeButton.innerHTML = '&#10006;';
 
-        this.atmContainer.appendChild(this.atm);
+        this.atmCont.appendChild(closeButton);
+        this.atmCont.appendChild(this.atm);
+
+        this.atmsContainer.appendChild(this.atmCont);
     }
 
     deleteAtm() {
-        this.atm.remove();
+        this.atmCont.remove();
     }
 
     addHumanToAtm(countPeople) {
-        
         this.atm.innerText = countPeople;
         this.atm.className = 'atm free-atm';
     }
 
-    setAtmClassBusy() { 
+    setAtmClassBusy() {
         this.atm.className = 'atm busy-atm';
     }
-
 }
 
 module.exports = AtmUi;

@@ -15,5 +15,6 @@ module.exports = {
     "rules": {
         "indent": ["error", 4],
         "no-console": "off",
+        "linebreak-style": [2, "windows"]
     }
 };

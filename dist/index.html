@@ -12,19 +12,14 @@
 <body>
     <div class="control-container">
         <label for="minTimeForAtm" class="label-for-min-max-input">Enter time in seconds:</label>
-        <input id="minTimeForAtm" class="input-number" type="number" placeholder="MIN" value="1">
-        <input id="maxTimeForAtm" class="input-number" type="number" placeholder="MAX" value="2">
+        <input id="minTimeForAtm" class="input-number" type="number" placeholder="MIN" step="0.1" min="0.1" value="1">
+        <input id="maxTimeForAtm" class="input-number" type="number" placeholder="MAX" step="0.1" min="0.2" value="2">
         <div id="addAtm" class="buttons">
             <span>
                 ADD ATM
             </span>
         </div>
-        <div id="deleteAtm" class="buttons">
-            <span>
-                DELETE ATM &#10006;
-            </span>
-        </div>
-        <div id="addQueue" class="buttons">
+        <!-- <div id="addQueue" class="buttons">
             <span>
                 ADD QUEUE
             </span>
@@ -33,7 +28,7 @@
             <span>
                 DELETE QUEUE
             </span>
-        </div>
+        </div> -->
     </div>
     <div id="atmContainer" class="atm-container">
 
