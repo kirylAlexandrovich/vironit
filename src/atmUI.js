@@ -17,6 +17,7 @@ class AtmUi extends Emitter {
 
         const closeButton = document.createElement('div');
         closeButton.className = 'atm-close-button';
+        closeButton.title = 'Close ATM';
         closeButton.innerHTML = '&#10006;';
 
         this.atmCont.appendChild(closeButton);

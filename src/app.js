@@ -19,15 +19,15 @@ class App {
         const queueGenerator = (m, n) => {
             setTimeout(() => {
                 queue.addHuman();
-                queue.queueUi.changeHumahsQuantityInQueue(queue.peopleQuantity);
+                queue.queueUi.changeHumahsQuantityInQueue(queue.personQueue.length);
                 queueGenerator(m, n);
                 this.atms.find((el, index) => {
-                    if (this.atms[index].atmStatus === 'free' && queue.peopleQuantity > 0) {
+                    if (this.atms[index].atmStatus === 'free' && queue.personQueue.length > 0) {
                         this.atms[index].emit('atmWorks', 0);
                     }
                     return false;
                 });
-                if (queue.peopleQuantity > 10 && state === 0) {
+                if (queue.personQueue.length > 10 && state === 0) {
                     const addAtmButton = document.getElementById('addAtm');
                     addAtmButton.click();
                     state = 1;
@@ -41,31 +41,45 @@ class App {
         this.queue.push(queue);
     }
 
-    addAtm(min, max) {
+    addAtm() {
         const atm = new CashMashine();
         atm.atmUi = new AtmUi();
-        atm.min = min;
-        atm.max = max;
-        atm.timer = 0;
+        atm.timer = (maxFreeTime) => {
+            const timerStart = atm.countPeople;
+            setTimeout(() => {
+                if (timerStart === atm.countPeople && atm.atmStatus === 'free') {
+                    this.atms.find((el, index) => {
+                        if (this.atms[index] === atm) {
+                            atm.atmUi.deleteAtm();
+                            this.atms.splice(index, 1);
+                            return true;
+                        }
+                        return false;
+                    });
+                }
+            }, maxFreeTime);
+        };
 
         atm.on('atmIsFree', () => {
-            if (this.atms.length > 0 && atm.atmStatus === 'free' && this.queue[0].peopleQuantity > 0) {
+            if (this.atms.length > 0 && atm.atmStatus === 'free' && this.queue[0].personQueue.length > 0) {
                 atm.emit('atmWorks', 0);
             }
         });
 
         atm.on('atmWorks', (queueIndex) => {
             atm.setAtmStatusBusy();
-            this.queue[queueIndex].removeHuman();
+            const workTime = this.queue[queueIndex].removeHuman();
             setTimeout(() => {
                 atm.atmUi.setAtmClassBusy();
                 setTimeout(() => {
                     atm.setAtmStatusFree();
                     atm.addHuman();
                     atm.atmUi.addHumanToAtm(atm.countPeople);
-                }, randomNum(atm.min, atm.max));
+                    atm.timer(workTime.getWorkTime() * 2);
+                }, workTime.getWorkTime());
             }, 1000);
         });
+        atm.timer(10000);
         this.atms.push(atm);
         atm.atmUi.addAtm();
     }

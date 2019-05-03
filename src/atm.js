@@ -14,6 +14,7 @@ class Atm extends Emitter {
     setAtmStatusFree() {
         this.atmStatus = 'free';
         this.emit('atmIsFree');
+        return this.atmStatus;
     }
 
     setAtmStatusBusy() {

@@ -4,13 +4,13 @@ import './style.css';
 const app = require('./app');
 
 function addAtm() {
-    let minTime = document.getElementById('minTimeForAtm').value;
-    let maxTime = document.getElementById('maxTimeForAtm').value;
-    if (minTime === '' || minTime < 1 || maxTime === '' || maxTime < 1) {
-        minTime = 1;
-        maxTime = 2;
-    }
-    app.addAtm(minTime * 1000, maxTime * 1000);
+    // let minTime = document.getElementById('minTimeForAtm').value;
+    // let maxTime = document.getElementById('maxTimeForAtm').value;
+    // if (minTime === '' || minTime < 1 || maxTime === '' || maxTime < 1) {
+    //     minTime = 1;
+    //     maxTime = 2;
+    // }
+    app.addAtm();
 }
 
 const addAtmButton = document.getElementById('addAtm');
@@ -23,5 +23,5 @@ deleteOnClick.addEventListener('click', (event) => {
     }
 });
 
-app.addAtm(3000, 4000, _);
+app.addAtm(1000, 4000, _);
 app.addQueue(1000, 2000);
