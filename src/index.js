@@ -4,12 +4,6 @@ import './style.css';
 const app = require('./app');
 
 function addAtm() {
-    // let minTime = document.getElementById('minTimeForAtm').value;
-    // let maxTime = document.getElementById('maxTimeForAtm').value;
-    // if (minTime === '' || minTime < 1 || maxTime === '' || maxTime < 1) {
-    //     minTime = 1;
-    //     maxTime = 2;
-    // }
     app.addAtm();
 }
 

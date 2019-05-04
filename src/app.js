@@ -44,29 +44,7 @@ class App {
     addAtm() {
         const atm = new CashMashine();
         atm.atmUi = new AtmUi();
-        atm.timer = (maxFreeTime) => {
-            const timerStart = atm.countPeople;
-            setTimeout(() => {
-                if (timerStart === atm.countPeople && atm.atmStatus === 'free') {
-                    this.atms.find((el, index) => {
-                        if (this.atms[index] === atm) {
-                            atm.atmUi.deleteAtm();
-                            this.atms.splice(index, 1);
-                            return true;
-                        }
-                        return false;
-                    });
-                }
-            }, maxFreeTime);
-        };
-
-        atm.on('atmIsFree', () => {
-            if (this.atms.length > 0 && atm.atmStatus === 'free' && this.queue[0].personQueue.length > 0) {
-                atm.emit('atmWorks', 0);
-            }
-        });
-
-        atm.on('atmWorks', (queueIndex) => {
+        atm.work = (queueIndex) => {
             atm.setAtmStatusBusy();
             const workTime = this.queue[queueIndex].removeHuman();
             setTimeout(() => {
@@ -75,11 +53,37 @@ class App {
                     atm.setAtmStatusFree();
                     atm.addHuman();
                     atm.atmUi.addHumanToAtm(atm.countPeople);
-                    atm.timer(workTime.getWorkTime() * 2);
                 }, workTime.getWorkTime());
             }, 1000);
+        };
+
+        atm.on('atmIsFree', () => {
+            if (this.atms.length > 0 && atm.atmStatus === 'free' && this.queue[0].personQueue.length > 0) {
+                atm.work(0);
+            }
+            const atmTimer = (maxFreeTime) => {
+                const countPeopleAtStartTimer = atm.countPeople;
+                setTimeout(() => {
+                    if (countPeopleAtStartTimer === atm.countPeople && atm.atmStatus === 'free') {
+                        this.atms.find((el, index) => {
+                            if (this.atms[index] === atm) {
+                                atm.atmUi.deleteAtm();
+                                this.atms.splice(index, 1);
+                                return true;
+                            }
+                            return false;
+                        });
+                    }
+                }, maxFreeTime);
+            };
+            atmTimer(10000);
         });
-        atm.timer(10000);
+
+        atm.on('atmWorks', (queueIndex) => {
+            atm.work(queueIndex);
+        });
+
+        atm.emit('atmIsFree');
         this.atms.push(atm);
         atm.atmUi.addAtm();
     }

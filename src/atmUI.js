@@ -2,11 +2,6 @@ const Emitter = require('./eventEmitter');
 // const index = require('./index');
 
 class AtmUi extends Emitter {
-    constructor() {
-        super();
-        this.atmsContainer = document.getElementById('atmContainer');
-    }
-
     addAtm() {
         this.atmCont = document.createElement('div');
         this.atmCont.className = 'atm-cont';
@@ -23,7 +18,7 @@ class AtmUi extends Emitter {
         this.atmCont.appendChild(closeButton);
         this.atmCont.appendChild(this.atm);
 
-        this.atmsContainer.appendChild(this.atmCont);
+        document.getElementById('atmContainer').appendChild(this.atmCont);
     }
 
     deleteAtm() {
