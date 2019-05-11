@@ -1,12 +1,12 @@
-const rundomNum = require('./randomNum');
+const randomNum = require('./randomNum');
 
 class Person {
     constructor() {
-        this.rundomTime = rundomNum(1000, 5000);
+        this.randomTime = randomNum(1000, 5000);
     }
 
     getWorkTime() {
-        return this.rundomTime;
+        return this.randomTime;
     }
 }
 

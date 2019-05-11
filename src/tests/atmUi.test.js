@@ -1,8 +1,8 @@
 let atmUi = require('../atmUI');
 atmUi = new atmUi();
+
 beforeEach(() => {
     document.body.innerHTML = `<div id="atmContainer" class="atm-container"></div>`;
-    
 
     atmUi.addAtm();
 });
@@ -23,14 +23,14 @@ test('Delete ATM', () => {
 });
 
 test('Change ATM status to free', () => {
-    atmUi.addHumanToAtm();
+    atmUi.addHumanToAtm(1);
 
-    expect(document.querySelector('.atm-free')).toBeTruthy();
-    expect(document.querySelector('.atm atm-free').innerText).toBe('1');
+    expect(document.querySelector('.atm').className).toBe('atm free-atm');
+    expect(document.querySelector('.atm').innerText).toBe(1);
 });
 
 test('Change ATM status to busy', () => {
     atmUi.setAtmClassBusy();
 
-    expect(document.querySelector('.atm-busy')).toBeTruthy();
+    expect(document.querySelector('.atm').className).toBe('atm busy-atm');
 })

@@ -58,9 +58,6 @@ class App {
         };
 
         atm.on('atmIsFree', () => {
-            if (this.atms.length > 0 && atm.atmStatus === 'free' && this.queue[0].personQueue.length > 0) {
-                atm.work(0);
-            }
             const atmTimer = (maxFreeTime) => {
                 const countPeopleAtStartTimer = atm.countPeople;
                 setTimeout(() => {
@@ -76,7 +73,11 @@ class App {
                     }
                 }, maxFreeTime);
             };
-            atmTimer(10000);
+            if (this.atms.length > 0 && atm.atmStatus === 'free' && this.queue[0].personQueue.length > 0) {
+                atm.work(0);
+            } else {
+                atmTimer(10000);
+            }
         });
 
         atm.on('atmWorks', (queueIndex) => {
